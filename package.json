@@ -20,7 +20,10 @@
   "homepage": "https://github.com/SoeWithaNumber/Ani-Rev2#readme",
   "dependencies": {
     "@discordjs/rest": "^1.1.0",
-    "discord.js": "^14.3.0",
+    "anilist-node": "^1.12.1",
+    "discord.js": "^14.3.0"
+  },
+  "devDependencies": {
     "dotenv": "^16.0.2"
   }
 }
