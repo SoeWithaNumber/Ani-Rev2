@@ -1,10 +1,12 @@
 const {EmbedBuilder,SlashCommandBuilder} = require("discord.js");
 function execute(interaction){
-    const helpEmbed = new EmbedBuilder();
-    helpEmbed.setTitle("Welcome to Ani!")
+    console.log("did make here")
+    const helpEmbed = new EmbedBuilder()
+    .setTitle("Welcome to Ani!")
     .setColor("Blue")
     .setDescription("WIP")
-    .setFooter("Version Dev_0.1")
+    .setFooter({text:"Version Dev_0.1"})
+    interaction.reply({embeds:[helpEmbed]})
 }
 
 module.exports = {

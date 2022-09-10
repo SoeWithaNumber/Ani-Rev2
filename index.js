@@ -7,7 +7,7 @@ const bot = new Client({
 });
 
 //welcome to the world :)
-const token = process.env.discordapi;
+const token = process.env.DISCORD_BOT_TOKEN;
 bot.login(token);
 
 //pulling commands
@@ -22,3 +22,12 @@ for (let i = 0; i < commandFiles.length; i++) {
 bot.on("ready",()=>{
     console.log("Paw patrol is on a roll")
 });
+
+bot.on("interactionCreate", (interaction)=>{
+    if (!interaction.isChatInputCommand()) return;
+    switch(interaction.commandName){
+        case "help": bot.commands.get("help").execute(interaction)
+        break
+    }
+    
+})
