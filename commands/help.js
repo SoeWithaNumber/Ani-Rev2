@@ -5,7 +5,7 @@ function execute(interaction){
     .setTitle("Welcome to Ani!")
     .setColor("Blue")
     .setDescription("WIP")
-    .setFooter({text:"Version Dev_0.1"})
+    .setFooter({text:"Version 0.1.1-dev"})
     interaction.reply({embeds:[helpEmbed]})
 }
 
