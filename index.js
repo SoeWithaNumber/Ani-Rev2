@@ -28,6 +28,7 @@ bot.on("interactionCreate", (interaction)=>{
     switch(interaction.commandName){
         case "help": bot.commands.get("help").execute(interaction)
         break
+        case "login": bot.commands.get("login").execute(interaction)
     }
     
 })
