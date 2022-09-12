@@ -1,6 +1,7 @@
 const {ModalBuilder, TextInputBuilder, SlashCommandBuilder, ActionRowBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle} = require("discord.js");
 async function execute(interaction) {
 
+    //Creating the instructions embed
     const instructionEmbed = new EmbedBuilder()
     .setTitle("Welcome to Ani!")
     .setDescription("In order to access some features of this bot, you must [log in](https://anilist.co/api/v2/oauth/authorize?client_id=6856&response_type=code) to Anilist.")
@@ -11,7 +12,22 @@ async function execute(interaction) {
         { name: "Step 4", value: "Paste it in and have fun using Ani!"}
     )
     .setColor("#51c971")
-    
+
+    //Creating modal
+    const loginModal = new ModalBuilder().setTitle("Login to Anilist!").setCustomId("loginModal")
+
+    const tokenInput = new TextInputBuilder()
+        .setLabel("Paste token")
+        .setStyle("Paragraph")
+        .setCustomId("tokenInput")
+        .setPlaceholder("The big wall of text goes here!")
+
+    const row = new ActionRowBuilder().addComponents(tokenInput)
+
+    loginModal.addComponents(row)
+
+
+    //Creating button for the embed
     const continueButton = new ButtonBuilder()
     .setCustomId("continueLogin")
     .setLabel("Continue")
@@ -20,7 +36,17 @@ async function execute(interaction) {
     const buttonRow = new ActionRowBuilder()
     .addComponents(continueButton)
 
-    await interaction.reply({embeds:[instructionEmbed], components: [buttonRow]})
+    //Sending embed with button
+    let instructionMessage = await interaction.reply({embeds:[instructionEmbed], components: [buttonRow]})
+    
+    //Collecting the button input and showing modal
+    const continueButtonCollector = instructionMessage.createMessageComponentCollector({filter: (interaction)=>interaction.customId=="continueLogin", time:180_000})
+    
+    continueButtonCollector.on("collect", interaction =>{
+        interaction.showModal(loginModal)
+    })
+    
+    
     
 }
 
@@ -32,4 +58,3 @@ module.exports = {
     name: "login"
 
 }
-
