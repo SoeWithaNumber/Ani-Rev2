@@ -42,11 +42,13 @@ async function execute(interaction) {
     //Collecting the button input and showing modal
     const continueButtonCollector = instructionMessage.createMessageComponentCollector({filter: (interaction)=>interaction.customId=="continueLogin", time:180_000})
     
-    continueButtonCollector.on("collect", interaction =>{
-        interaction.showModal(loginModal)
+    continueButtonCollector.on("collect", buttonInteraction =>{
+        buttonInteraction.showModal(loginModal)
     })
     
-    
+    //Taking in the modal input
+    let tokenSubmission = await interaction.awaitModalSubmit({filter: submission => submission.customId=="loginModal", time: 180_000})
+    await tokenSubmission.deferReply()
     
 }
 
