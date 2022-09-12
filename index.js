@@ -1,10 +1,23 @@
 const {Client,Collection,GatewayIntentBits}=require("discord.js");
 const {readdirSync}=require("node:fs");
+const axios = require("axios")
 require("dotenv").config();
 
 const bot = new Client({
     intents: [GatewayIntentBits.GuildMessages]
 });
+
+//Configuring axios and attaching to discord client
+bot.axios = axios.create({
+    baseUrl: "https://graphql.anilist.co/",
+    headers:{
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+    }
+})
+bot.axios.interceptors.response.use((response) => {
+  return response.data.data
+})
 
 //welcome to the world :)
 const token = process.env.DISCORD_BOT_TOKEN;
