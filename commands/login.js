@@ -54,7 +54,23 @@ async function execute(interaction) {
     
     //Taking in the modal input
     let tokenSubmission = await interaction.awaitModalSubmit({filter: submission => submission.customId=="loginModal", time: 180_000})
-    await tokenSubmission.deferReply()
+    tokenSubmission.deferReply()
+    let token = tokenSubmission.fields.getTextInputValue("tokenInput")
+    
+    //Request oauth token from anilist
+
+    let response = await interaction.client.axios.request({
+        'baseURL': "",
+        'uri': 'https://anilist.co/api/v2/oauth/token',
+        data:{
+            'grant_type': 'authorization_code',
+            'client_id': 6856,
+            'client_secret': process.env.ANILIST_SECRET,
+            'redirect_uri': 'https://anilist.co/api/v2/oauth/pin',
+            'code': token
+        }
+    }).catch(console.log).then(console.log)
+    console.log(response)
     
 }
 
