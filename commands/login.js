@@ -45,6 +45,12 @@ async function execute(interaction) {
     continueButtonCollector.on("collect", buttonInteraction =>{
         buttonInteraction.showModal(loginModal)
     })
+
+    //Disable button after finishing collector
+    continueButtonCollector.on("end", ()=>{
+        buttonRow.components[0].setDisabled(true)
+        instructionMessage.interaction.editReply({components:[buttonRow]})
+    })
     
     //Taking in the modal input
     let tokenSubmission = await interaction.awaitModalSubmit({filter: submission => submission.customId=="loginModal", time: 180_000})
