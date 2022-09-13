@@ -9,6 +9,7 @@ const bot = new Client({
 
 //Configuring axios and attaching to discord client
 bot.axios = axios.create({
+    method: "POST",
     baseUrl: "https://graphql.anilist.co/",
     headers:{
         'Content-Type': 'application/json',
