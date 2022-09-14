@@ -62,10 +62,8 @@ async function execute(interaction) {
     instructionMessage.interaction.editReply({ components: [buttonRow] })
     
     //Request oauth token from anilist
-
     let response = await interaction.client.axios.request({
-        'baseURL': "",
-        'uri': 'https://anilist.co/api/v2/oauth/token',
+        'url': 'https://anilist.co/api/v2/oauth/token',
         data:{
             'grant_type': 'authorization_code',
             'client_id': 6856,
@@ -73,8 +71,56 @@ async function execute(interaction) {
             'redirect_uri': 'https://anilist.co/api/v2/oauth/pin',
             'code': token
         }
-    }).catch(console.log).then(console.log)
-    console.log(response)
+    })
+
+    //Adding the user to the list of logged in users
+    interaction.client.anilistUsers.set(interaction.user.id, response.data.access_token)
+
+    //Grabbing current user info from Anilist
+    let graphQLReq = `
+        query{
+            Viewer{
+                name
+                avatar{
+                    large
+                }
+                about
+                siteUrl
+                statistics{
+                    anime{
+                        count
+                    }
+                    manga{
+                        count
+                    }
+                }
+            }
+        }
+    `
+    let userInfo = await interaction.client.axios.request({
+        headers: {
+            Authorization: `Bearer ${interaction.client.anilistUsers.get(interaction.user.id)}`
+        },
+        data:
+            JSON.stringify({query:graphQLReq})
+    })
+
+    //TO BE REPLACED WITH USER EMBED FUNCTION FROM LIAM
+
+    const userEmbed = new EmbedBuilder()
+    .setTitle(`Logged in as ${userInfo.Viewer.name}`)
+    .setThumbnail(userInfo.Viewer.avatar.large)
+    .setColor("Grey")
+    .setFields(
+        {name: "Anime watched", value: `${userInfo.Viewer.statistics.anime.count}`, inline: true},
+        {name: "Manga read", value: `${userInfo.Viewer.statistics.manga.count}`, inline: true}
+    )
+    .setFooter({text: userInfo.Viewer.siteUrl})
+
+    //TO BE REPLACED WITH USER EMBED FUNCTION FROM LIAM
+
+    tokenSubmission.editReply({embeds:[userEmbed]})
+    
     
 }
 
