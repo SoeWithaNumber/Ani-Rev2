@@ -18,8 +18,11 @@ bot.axios = axios.create({
 })
 
 bot.axios.interceptors.response.use((response) => {
-  return response.data.data
+    if (response.config.url == "https://anilist.co/api/v2/oauth/token") return response
+    return response.data.data
 })
+
+bot.anilistUsers = new Collection()
 
 //welcome to the world :)
 const token = process.env.DISCORD_BOT_TOKEN;
@@ -44,6 +47,7 @@ bot.on("interactionCreate", (interaction)=>{
         case "help": bot.commands.get("help").execute(interaction)
         break
         case "login": bot.commands.get("login").execute(interaction)
+        break
     }
     
 })

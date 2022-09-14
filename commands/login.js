@@ -56,6 +56,10 @@ async function execute(interaction) {
     let tokenSubmission = await interaction.awaitModalSubmit({filter: submission => submission.customId=="loginModal", time: 180_000})
     tokenSubmission.deferReply()
     let token = tokenSubmission.fields.getTextInputValue("tokenInput")
+
+    //Disable submit button after taking form input
+    buttonRow.components[0].setDisabled(true)
+    instructionMessage.interaction.editReply({ components: [buttonRow] })
     
     //Request oauth token from anilist
 
