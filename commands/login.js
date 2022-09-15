@@ -68,6 +68,7 @@ async function execute(interaction) {
     instructionMessage.interaction.editReply({ components: [buttonRow] })
     
     //Request oauth token from anilist
+    let authFailed = false
     let response = await interaction.client.axios.request({
         'url': 'https://anilist.co/api/v2/oauth/token',
         data:{
@@ -77,7 +78,19 @@ async function execute(interaction) {
             'redirect_uri': 'https://anilist.co/api/v2/oauth/pin',
             'code': token
         }
+    }).catch((error)=>{ //Error handling
+        authFailed = true
+        if(error.response.status == 400){
+
+            tokenSubmission.editReply("Unable to authorize. Make sure you copied the token correctly!")
+        }
+        else{
+            tokenSubmission.editReply("Unknown error occurred! Try again later")
+        }
     })
+    
+    //If errored, return
+    if(authFailed) return
 
     //Adding the user to the list of logged in users
     interaction.client.anilistUsers.set(interaction.user.id, response.data.access_token)
@@ -109,7 +122,12 @@ async function execute(interaction) {
         },
         data:
             JSON.stringify({query:graphQLReq})
+    }).catch(()=>{ //More error handling
+        tokenSubmission.editReply("An unknown error has ocurred! Try again later")
+        authFailed = true
     })
+
+    if(authFailed) return
 
     //TO BE REPLACED WITH USER EMBED FUNCTION FROM LIAM
 
