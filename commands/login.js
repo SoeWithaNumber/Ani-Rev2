@@ -1,6 +1,12 @@
 const {ModalBuilder, TextInputBuilder, SlashCommandBuilder, ActionRowBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle} = require("discord.js");
 async function execute(interaction) {
 
+    //Checking to see if the user is already logged in
+    if(interaction.client.anilistUsers.get(interaction.user.id)){
+        interaction.reply("You're already logged in!")
+        return
+    }
+
     //Creating the instructions embed
     const instructionEmbed = new EmbedBuilder()
     .setTitle("Welcome to Ani!")
