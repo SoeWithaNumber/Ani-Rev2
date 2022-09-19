@@ -7,10 +7,10 @@ function userEmbedGenerator(interaction,userInfo){
     .setThumbnail(userInfo.avatar.large)
     .addFields(
         {name:"Anime Watched",value:userInfo.statistics.anime.count.toString(),inline:true},
-        {name:"Manga Watched",value:userInfo.statistics.manga.count.toString(),inline:true},
+        {name:"Manga Read",value:userInfo.statistics.manga.count.toString(),inline:true},
     )
     .setFooter({text:userInfo.siteUrl})
-    interaction.reply({embeds:[userEmbed]})
+    return userEmbed
 }
 
 module.exports = {

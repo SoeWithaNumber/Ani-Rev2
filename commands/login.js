@@ -1,4 +1,5 @@
 const {ModalBuilder, TextInputBuilder, SlashCommandBuilder, ActionRowBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle} = require("discord.js");
+const {userEmbedGenerator} = require("../helper/userEmbed.js")
 async function execute(interaction) {
 
     //Checking to see if the user is already logged in
@@ -129,20 +130,7 @@ async function execute(interaction) {
 
     if(authFailed) return
 
-    //TO BE REPLACED WITH USER EMBED FUNCTION FROM LIAM
-
-    const userEmbed = new EmbedBuilder()
-    .setTitle(`Logged in as ${userInfo.Viewer.name}`)
-    .setThumbnail(userInfo.Viewer.avatar.large)
-    .setColor("Grey")
-    .setFields(
-        {name: "Anime watched", value: `${userInfo.Viewer.statistics.anime.count}`, inline: true},
-        {name: "Manga read", value: `${userInfo.Viewer.statistics.manga.count}`, inline: true}
-    )
-    .setFooter({text: userInfo.Viewer.siteUrl})
-
-    //TO BE REPLACED WITH USER EMBED FUNCTION FROM LIAM
-
+    const userEmbed = userEmbedGenerator(interaction,userInfo.Viewer)
     tokenSubmission.editReply({embeds:[userEmbed]})
     
     
