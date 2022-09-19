@@ -1,6 +1,5 @@
 const {EmbedBuilder,SlashCommandBuilder} = require("discord.js");
 function execute(interaction){
-    console.log("did make here")
     const helpEmbed = new EmbedBuilder()
     .setTitle("Welcome to Ani!")
     .setColor("Blue")
