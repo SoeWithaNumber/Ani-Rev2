@@ -8,11 +8,6 @@ async function execute(interaction) {
             query($name: String!){
                 Character(search: $name) {
                     name {
-                        first
-                        middle
-                        last
-                        full
-                        native
                         userPreferred
                     }
                 gender
@@ -25,7 +20,8 @@ async function execute(interaction) {
                     month
                     day
                 }
-                description
+                siteUrl
+                description(asHtml: false)
                 isFavourite
                 }
             }
@@ -41,8 +37,8 @@ async function execute(interaction) {
     if (aniUsers.has(interaction.user.id)) request.headers = { "Authorization": `Bearer ${aniUsers.get(interaction.user.id)}`}
     let characterInfo = await interaction.client.axios.request(request).catch(console.log)
 
-    let characterEmbed = characterEmbedGenerator(characterInfo.character)
-    interaction.reply()
+    let characterEmbed = characterEmbedGenerator(characterInfo.character, aniUsers.has(interaction.user.id))
+    interaction.reply({embeds:[characterEmbed]})
 
 }
 
