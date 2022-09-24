@@ -48,6 +48,8 @@ bot.on("interactionCreate", (interaction)=>{
         break
         case "login": bot.commands.get("login").execute(interaction)
         break
+        case "character": bot.commands.get("character").execute(interaction)
+        break
     }
     
 })
