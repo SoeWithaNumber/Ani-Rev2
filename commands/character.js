@@ -37,7 +37,7 @@ async function execute(interaction) {
     if (aniUsers.has(interaction.user.id)) request.headers = { "Authorization": `Bearer ${aniUsers.get(interaction.user.id)}`}
     let characterInfo = await interaction.client.axios.request(request).catch(console.log)
 
-    let characterEmbed = characterEmbedGenerator(characterInfo.character, aniUsers.has(interaction.user.id))
+    let characterEmbed = characterEmbedGenerator(characterInfo.Character, aniUsers.has(interaction.user.id))
     interaction.reply({embeds:[characterEmbed]})
 
 }

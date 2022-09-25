@@ -1,7 +1,6 @@
 const { EmbedBuilder } = require("discord.js");
 
 function characterEmbedGenerator(characterInfo, isLoggedIn) {
-
     //Creating embed and adding title, url, thumbnail, and link
     const characterEmbed = new EmbedBuilder()
     .setTitle(characterInfo.name.userPreferred)
@@ -13,9 +12,9 @@ function characterEmbedGenerator(characterInfo, isLoggedIn) {
 
     //Converting date of birth from separate numbers into a readable string, taking into account that any field may or may not be there
     let dateOfBirth = ""
-    if (characterInfo.dateOfBirth.year) dateOfBirth += characterInfo.dateOfBirth.year
+    if (characterInfo.dateOfBirth.year) dateOfBirth += `${characterInfo.dateOfBirth.year}/`
     if (characterInfo.dateOfBirth.month) dateOfBirth += characterInfo.dateOfBirth.month
-    if (characterInfo.dateOfBirth.day) dateOfBirth += characterInfo.dateOfBirth.day
+    if (characterInfo.dateOfBirth.day) dateOfBirth += `/${characterInfo.dateOfBirth.day}`
     
     //Checking to see if DOB or age exist. If so, add to embed
     if(dateOfBirth) characterEmbed.addFields({name: "Birthday", value: dateOfBirth, inline: true})
@@ -27,10 +26,26 @@ function characterEmbedGenerator(characterInfo, isLoggedIn) {
     }
 
     //Processing the description
-    //Replacing Anilist markup with Discord markup
-    //Anilist bold (__) to Discord bold (**)
-    
+    let description = characterInfo.description
+    //Underscores in Anilist work the same as asterisks in Discord, so replace them one-for-one
+    description = description.replaceAll("_","*")
+    //Replace Anilist spoiler tags with Discord spoiler tags
+    description = description.replaceAll(/~!|!~/g, "||")
 
+    //If the description is too long, cut it to length, then remove tailing sentences, replace any uncompleted tags, then add a read more option
+    if(description.length>4096){
+        description = description.slice(0,4096-50)
+        //Remove trailing sentences
+        description = description.replace(/[^.]+$/, "")
+
+        //If the number of tags is uneven, finish the one that got cut-off
+        let tags = description.match(/\*+|\|\||~~/g)
+        if (tags.length % 2 != 0) description += tags[tags.length-1]
+
+        //Add read more button
+        description += ` [Read more](${ characterInfo.siteUrl })`
+    }
+    characterEmbed.setDescription(description)
     return characterEmbed
 }
 
