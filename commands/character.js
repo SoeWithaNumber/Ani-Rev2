@@ -33,9 +33,19 @@ async function execute(interaction) {
     }
 
     let aniUsers = interaction.client.anilistUsers
-    
+    let hasFailed = false
     if (aniUsers.has(interaction.user.id)) request.headers = { "Authorization": `Bearer ${aniUsers.get(interaction.user.id)}`}
-    let characterInfo = await interaction.client.axios.request(request).catch(console.log)
+    let characterInfo = await interaction.client.axios.request(request).catch(error=>{ //Error handling
+        hasFailed = true
+
+        if(error.response.status == 404){
+            interaction.reply("Uh oh! Couldn't find the character... Check spelling!")
+        }
+        else{
+            interaction.reply("Uh oh! An unknown error occurred... Try again later!")
+        }
+    })
+    if(hasFailed) return
 
     let characterEmbed = characterEmbedGenerator(characterInfo.Character, aniUsers.has(interaction.user.id))
     interaction.reply({embeds:[characterEmbed]})
