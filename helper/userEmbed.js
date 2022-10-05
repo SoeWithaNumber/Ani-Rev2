@@ -1,5 +1,5 @@
 const {EmbedBuilder} = require("discord.js");
-function userEmbedGenerator(interaction,userInfo){
+function userEmbedGenerator(userInfo){
     const userEmbed = new EmbedBuilder()
     .setTitle("Logged in as "+userInfo.name)
     .setColor("Green")
