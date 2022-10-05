@@ -35,7 +35,7 @@ function searchEmbedGenerator(interaction,mediaInfo){
     )
     if(mediaInfo.type == "MANGA") searchEmbed.addFields({name:"Volumes Read", value:mediaInfo.mediaListEntry.progressVolumes})
 
-    if(mediaInfo.mediaListEntry.user.scoreFormat == "POINT_3"){
+    if (mediaInfo.mediaListEntry.user.mediaListOptions.scoreFormat == "POINT_3"){
         switch(mediaInfo.mediaListEntry.score){
             case 0: searchEmbed.addFields({name:"Score", value:"Unrated",inline:true}); break
             case 1: searchEmbed.addFields({name:"Score", value:"☹",inline:true}); break
