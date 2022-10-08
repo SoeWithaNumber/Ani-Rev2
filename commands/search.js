@@ -58,7 +58,19 @@ async function execute(interaction) {
     }
 
     if(anilistUsers.has(interaction.user.id)) request.headers = {Authorization: `Bearer ${anilistUsers.get(interaction.user.id)}`}
-    let mediaInfo = await interaction.client.axios.request(request).catch(console.log)
+    let hasFailed = false
+    let mediaInfo = await interaction.client.axios.request(request).catch(error=>{// Error handling
+        hasFailed = true
+
+        if (error.response.status == 404) {
+            interaction.editReply("Uh oh! Couldn't find the media... Check spelling!")
+        }
+        else {
+            interaction.editReply("Uh oh! An unknown error occurred... Try again later!")
+        }
+    })
+    if(hasFailed) return
+
     let mediaEmbed = searchEmbedGenerator(interaction, mediaInfo.Media)
 
     interaction.editReply({embeds:[mediaEmbed]})
