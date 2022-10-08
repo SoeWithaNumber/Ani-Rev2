@@ -1,6 +1,67 @@
-const { SlashCommandBuilder } = require("discord.js");
+const { SlashCommandBuilder, ChatInputCommandInteraction } = require("discord.js");
 const {searchEmbedGenerator} = require("../helper/searchEmbed")
-function execute(interaction) {
+/**
+ * @param {ChatInputCommandInteraction} interaction 
+ */
+async function execute(interaction) {
+    let name = interaction.options.getString("title")
+    let type = interaction.options.getString("format") ? interaction.options.getString("format") : "ANIME"
+    let anilistUsers = interaction.client.anilistUsers
+    await interaction.deferReply()
+
+    let request = {
+        data: JSON.stringify({
+            query: `query($name: String!, $type: MediaType){
+                Media(search: $name, type: $type) {
+                    title {
+                        romaji
+                        english
+                        native
+                        userPreferred
+                    }
+                    type
+                    description(asHtml: false)
+                    episodes
+                    chapters
+                    volumes
+                    genres
+                    status
+                    format
+                    duration
+                    bannerImage
+                    isFavourite
+                    coverImage{
+                        large
+                        color
+                    }
+                    mediaListEntry{
+                        private
+                        status
+                        progress
+                        progressVolumes
+                        notes
+                        score
+                        user{
+                            mediaListOptions{
+                                scoreFormat
+                            }
+                        }
+
+                    }
+                }
+            }`,
+            variables: {
+                name,
+                type
+            }
+        })
+    }
+
+    if(anilistUsers.has(interaction.user.id)) request.headers = {Authorization: `Bearer ${anilistUsers.get(interaction.user.id)}`}
+    let mediaInfo = await interaction.client.axios.request(request).catch(console.log)
+    let mediaEmbed = searchEmbedGenerator(interaction, mediaInfo.Media)
+
+    interaction.editReply({embeds:[mediaEmbed]})
 
 }
 
@@ -19,13 +80,13 @@ module.exports = {
             .setDescription("The format you want to search for")
             .setRequired(false)
             .addChoices(
-                { name: "Anime", value: "anime" },
-                { name: "Manga", value: "manga" }
+                { name: "Anime", value: "ANIME" },
+                { name: "Manga", value: "MANGA" }
             )
 
         ),
         
-    name: "help"
+    name: "search"
 
 }
 

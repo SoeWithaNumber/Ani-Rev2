@@ -130,7 +130,7 @@ async function execute(interaction) {
 
     if(authFailed) return
 
-    const userEmbed = userEmbedGenerator(interaction,userInfo.Viewer)
+    const userEmbed = userEmbedGenerator(userInfo.Viewer)
     tokenSubmission.editReply({embeds:[userEmbed]})
     
     
