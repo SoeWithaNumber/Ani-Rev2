@@ -50,6 +50,7 @@ bot.on("interactionCreate", (interaction)=>{
         break
         case "character": bot.commands.get("character").execute(interaction)
         break
+        case "search": bot.commands.get("search").execute(interaction)
     }
     
 })
