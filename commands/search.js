@@ -98,7 +98,8 @@ module.exports = {
 
         ),
         
-    name: "search"
+    name: "search",
+    description: "Search for any media.\nSyntax: `/search [title] [format]`"
 
 }
 
