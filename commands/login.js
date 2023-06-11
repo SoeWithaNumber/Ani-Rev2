@@ -141,6 +141,7 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName("login")
         .setDescription("Log in to anilist.co"),
-    name: "login"
+    name: "login",
+    description: "Log in to Anilist for additional features. Some commands require login\nSyntax: `/login`"
 
 }

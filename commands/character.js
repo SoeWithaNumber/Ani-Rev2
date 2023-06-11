@@ -62,7 +62,10 @@ module.exports = {
             .setDescription("The name of the character you want")
             .setRequired(true)
         ),
-    name: "character"
+    //The name used by command handler
+    name: "character",
+    //Will be used in the help command
+    description:"Search for any character!\nSyntax: `/character [character name]`"
 
 }
 

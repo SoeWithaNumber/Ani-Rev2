@@ -1,11 +1,18 @@
 const {EmbedBuilder,SlashCommandBuilder} = require("discord.js");
+
 function execute(interaction){
     const helpEmbed = new EmbedBuilder()
     .setTitle("Welcome to Ani!")
     .setColor("Blue")
-    .setDescription("WIP")
-    .setFooter({text:"Version 0.2.0-dev"})
+    .setDescription("[Found a bug?](https://www.definitions.net/definition/TODO)")
+    .setFooter({ text:"Version 0.6.0-dev"})
+    
+    interaction.client.commands.forEach(value=>{
+        helpEmbed.addFields({name: `\`/${value.name}\``, value: `${value.description}`})
+    
+    })
     interaction.reply({embeds:[helpEmbed]})
+
 }
 
 module.exports = {
@@ -13,7 +20,8 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName("help")
         .setDescription("Ani-bot Help Command"),
-    name:"help"
+    name:"help",
+    description: "This command."
         
 }
 
