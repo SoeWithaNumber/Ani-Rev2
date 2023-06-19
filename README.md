@@ -7,6 +7,7 @@ A discord bot that allows you to access and edit data from the website Anilist
 >🟦: To do
 
 Features:
+
 ✅ Log in using Anilist account
 
 ✅ Access show and book information
